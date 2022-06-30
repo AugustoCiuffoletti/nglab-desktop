@@ -1,7 +1,10 @@
 # docker-ubuntu-vnc-desktop
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/dorowu/ubuntu-desktop-lxde-vnc.svg)](https://hub.docker.com/r/dorowu/ubuntu-desktop-lxde-vnc/)
-[![Docker Stars](https://img.shields.io/docker/stars/dorowu/ubuntu-desktop-lxde-vnc.svg)](https://hub.docker.com/r/dorowu/ubuntu-desktop-lxde-vnc/)
+This is a fork of the dorowu/ubuntu-desktop-lxde-vnc. With respect to that project we add tools and configuration to produce a Docker image for a virtual networking laboratory. The laboratory hosts two kinds of virtual machines implemented with Dockers: one with a graphical desktop (whose image is built using this repo), and another with a terminal interface and no graphics. One VM of each kind is sufficient to perform many activities.
+
+Here following is the documentation of the original project.
+
+___
 
 docker-ubuntu-vnc-desktop is a Docker image to provide web VNC interface to access Ubuntu LXDE/LxQT desktop environment.
 

@@ -10,6 +10,13 @@ FROM ubuntu:20.04 as system
 
 RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#mirror://mirrors.ubuntu.com/mirrors.txt#' /etc/apt/sources.list;
 
+### added nglab
+
+RUN yes | unminimize
+RUN apt-get --yes upgrade
+RUN apt-get --yes install apt-utils
+
+### end added
 
 # built-in packages
 ENV DEBIAN_FRONTEND noninteractive
@@ -72,13 +79,25 @@ RUN apt-get update \
 	&& pip3 install setuptools wheel && pip3 install -r /tmp/requirements.txt \
     && ln -s /usr/bin/python3 /usr/local/bin/python \
     && dpkg-query -W -f='${Package}\n' > /tmp/b.txt \
-    && apt-get remove -y `diff --changed-group-format='%>' --unchanged-group-format='' /tmp/a.txt /tmp/b.txt | xargs` \
-    && apt-get autoclean -y \
+    && apt-get remove -y `diff --changed-group-format='%>' --unchanged-group-format='' /tmp/a.txt /tmp/b.txt | xargs`
+
+### added nglab
+# Installazione package generazione e cattura di pacchetti
+RUN apt-get --yes install wireshark packeth
+# Installazione strumenti di rete
+RUN apt-get --yes install netcat iproute2 net-tools dnsutils iputils-ping traceroute nmap
+# Installazione strumenti di sviluppo
+RUN apt-get --yes install make git
+# Installazione strumenti ssh
+RUN apt-get --yes install openssh-client openssh-server
+# end added
+
+### Cleanup (moved)
+RUN apt-get autoclean -y \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/* /tmp/a.txt /tmp/b.txt
-
-
+### end moved
 ################################################################################
 # builder
 ################################################################################
@@ -107,8 +126,6 @@ RUN cd /src/web \
     && yarn \
     && yarn build
 RUN sed -i 's#app/locale/#novnc/app/locale/#' /src/web/dist/static/novnc/app/ui.js
-
-
 
 ################################################################################
 # merge
